@@ -1,20 +1,46 @@
-# PREFORMA suppliers Interoperability Group
-## Interoperability Shell- Shell using CLI
+PREFORMA Interoperability Framework
+===================================
 
-### 1. Objective
+Abbreviations
+=============
+|     | Explaination
+| :-- | :---
+| CC  | Conformance Checker
+| CLI | Command Line Interface
+| PEA | PREFORMA Extension API
+| PIA | PREFORMA Intergration API
+| PIF | PREFORMA Interoperability 
 
-At the last interoperability meeting, on 21 December 2015, we agreed on creating interoperability between suppliers shells using the Command Line Interface (CLI) for the April workshop.
+Introduction
+============
 
-The aim of this document is to define an starting point to discuss the CLI commands needed in the Shell-Shell communication.
+Overview
+--------
 
-### 2. CLI requirements
+The PIF consist of two set of APIs: the PIA and PIE.
+
+The PIA defines a method to integrate an external system with a CC. Discussed in Section 1.
+
+The PEA defines the method to extend a CC (Conformance Checker) to check for other types of resources not supported by the source CC through means of using another CC or a specific plug-in. Discussed in Section 2.
+
+Objective
+---------
+
+PREFORMA requires at minimum a support for extending a CC through a CLI.
+
+The purpose of this document is to work out the precise defintion of PIF.
+
+SECTION 1 - PIA
+============
+
+### 1. CLI requirements
 
 -	Ask for a single file check and produce a common XML report.
 -	Attach conformance checkers using the shell CLI.
 -	Get information about the Conformance Checkers.
 -	Configure remote Conformance Checkers.
 
-### 3. CLI Usage
+### 2. CLI Usage
 
 For interoperability purposes, the shells will have two main execution modes.
 
@@ -24,7 +50,7 @@ For interoperability purposes, the shells will have two main execution modes.
 
 Each call produces an XML output, which is parsed by the shell that made the call, to continue its processing.
 
-### 3.1. Execution mode
+### 2.1. Execution mode
 
 #### Syntax
 
@@ -48,7 +74,7 @@ Run the program to check a file. A job id is returned. Internally, the shell dec
 
 Example 2. Get the state of a job
 
-Ask for the state of a previously started job. The possible states can be: “Running”, “Finished”, “Waiting” or “Unknown”. If the state is “Running”, the field “progress” may contain the percentage of completion of the task. If the state is “Finished”, then the field “report” contains the path to the xml containing the report.
+Ask for the state of a previously started job. The possible states can be: *Running*, *Finished*, *Waiting* or *Unknown*. If the state is *Running*, the field *progress* may contain the percentage of completion of the task. If the state is *Finished*, then the field *report* contains the path to the xml containing the report.
 
 ```$ dpfmanager check --state 1001```
 
@@ -186,7 +212,7 @@ The selected configuration file for each conformance checker can be changed to a
 
 ```$ dpfmanager modules --configure Tiff JsonPDF```
 
-###4. XML definition
+### 3. XML definition
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -327,8 +353,134 @@ The selected configuration file for each conformance checker can be changed to a
 </schema>
 ```
 
-### 5. Error codes (to be extended…):
+### 4. Error codes (to be extended):
 
 - 1001: No conformance checker found for this file
 - 1002: Conformance checker not available
 - 2001: Configuration not found
+
+SECTION 2 - PEA
+============
+
+Guiding principles
+------------------
+
+### On the reason of enclosing the extension configuration with the Policy profile
+
+The purpose of the PREFORMA Policy checker is to allow conformance to requirments that cannot be resolved through technical mechanisms. This refers to cases where the use of a technical functionality is facultative and its use is based on a user's preferences and not because it is tehnically valid or invalid. The ability to control this behavior is of utmost importance for government agencies and memory institutions, as they want to regulate the definition of a correct use of a file format.
+
+The purpose of the PREFORMA CC is, in part, to address the fact that file format specifications leave room for interpretations, and technical implementations could take form in many different ways.
+
+The PREFORMA project covers only three specific file formats: Matroska, PDF/A and TIFF (Baseline/IT/EP). Each format can however have one or more subsets of other file or resource formats, such as, embedded images and fonts, image encodings, ICC profiles, and attachments. Each of these formats may suffer from the same problems that the PREFORMA project attempts to address.
+
+The PEA allows extending a CC to use other CCs to check the conformance of any additional formats in the source file format. Depending on the format there could be none, one or more alternatives for deciding how to validate the format. It follows that different users may implement different methods for handling which extensions to use. Consequently, a conformance check of a file using one and the same CC may result in different outcomes depending on how the CC's extensions are configured. This would be true regardless if a Policy is used or not.
+
+The problem is therefore, if the configuration of the extension is dependent on the CC, in order to have a uniform conformance check of a file format the CC for the file format must be setup correctly. This would require additional information and documentation to be distributed by, e.g., a government agency, and understood by the users, in order to ensure a correct check of a file format.
+
+One of the main principles of digital preservation is to contain all necessary components needed to recreate the original state of information within one and the same container.
+
+By enclosing the extension configuration with a Policy profile all necessary information is provided in order to ensure that the file has been checked in accordance with the requirments decided by the policy maker.
+
+Structure
+---------
+
+The PEA consist of the root element *extension*, which is a child of the policy root element. Each extension, that is, the child elements of *extension*, is defined within a *cc* element. 
+
+Currently the Policy profile is an early draft and could be adjusted. Some of the elements could be more suitable as attributes.
+
+Given the root element of the policy, the following subset *extension* is applied.
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<policy>
+  <extension>
+    <cc>
+```
+```XML
+      <signature type='[hex|ascii|iso8859-1|xmp|fext|uti|mime]'>[]</signature>
+```
+Which method to apply in order to make an initial, quick/fast, guess of the type of resource. The element value depends on the type of method applied, e.g., header information / magic number, XMP element, file extension, UTI, MIME.
+
+Defining an appropriate method for defining multiple values may be necessary.
+
+EXAMPLE
+```XML
+      <signature type='fext'>jpg|jpeg</signature>
+```
+```XML
+      <signature type='XMP'>
+        <pdfaid>part:1</pdfaid>
+        <pdfaid>conformance:A</pdfaid>
+      </signature>
+```
+
+```XML
+      <priority>[unsigned int]</priority>
+```
+
+If multiple CCs for the same type of resource are allowed, an order of precedence is needed.
+
+Could be an attribute of the element "cc", e.g., ```XML <cc priority='1'> ... </cc>```.
+
+```XML
+      <name>[string]</name>
+```
+The user's label for the purpose of the extension. Could be complemented with a *description* element.
+
+```XML
+      <version>[string]</version>
+```
+The version, release, edition or other form of identification of a variance of the extension.
+
+This element could be an attribute of the element "exec", e.g., ```<exec version='1.0'>...</exec>```.
+
+```XML
+      <api>[string [cli|so|jar|include|import|...]]</api>
+```
+The interface to the extension. All CCs have to have support for a CLI.
+
+This element could be an attribute of the element "exec", e.g., ```<exec api='jar'>...</exec>```.
+
+```XML
+      <path>[string [file]]</path>
+```
+The path to the file which executes or initializes the extension.
+
+```XML
+      <arg>[string []]</arg>
+```
+The arguments, switches, options, or parameters, if any, to be passed to the extension.
+
+This element could be an attribute of the element "exec", e.g., ```<exec arg='-x -y'>...</exec>```.
+
+```XML
+  <report>[string [directory]]</report>
+```
+
+The directory where the report from the extension is saved. If omitted, then defaults to the source CC's report directory.
+
+```XML
+  <style>[string [ file [css|xsl|...]]]</style>
+```
+
+The style sheet to apply when formatting the report from the extension. Omit to default to the source CC's stylesheet.
+
+The style element could be an attribute of the element "report", e.g., ```<report style='./../style.css'>...</report>```.
+
+```XML
+  <policy>[string [file]]</policy>
+```
+
+The policy to apply for the extension. A policy is specific to a CC and is created according to the rules by that CC. The source CC only points to the policy which belongs to a specific CC extending the source CC; it does not necessary supports the creation or editing of other extension's policies.
+
+```XML
+  <...>[]</...>
+```
+Additional elements that may be required, e.g., such as "timeout".
+
+
+```XML
+  </extension>
+  <!-- The policy elements -->
+</policy>
+```
+
