@@ -438,7 +438,7 @@ This element could be an attribute of the element "cc", e.g., ```<cc version='1.
 ```XML
       <api>[string [cli|so|jar|include|import|...]]</api>
 ```
-The interface to the extension. All CCs have to have support for a CLI.
+The interface to the extension. All CCs have to support a CLI.
 
 This element could be an attribute of the element "cc", e.g., ```<cc api='jar'>...</cc>```.
 
