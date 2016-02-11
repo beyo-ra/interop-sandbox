@@ -431,14 +431,14 @@ The user's label for the purpose of the extension. Could be complemented with a 
 ```
 The version, release, edition or other form of identification of a variance of the extension.
 
-This element could be an attribute of the element "path", e.g., ```<path version='1.0'>...</path>```.
+This element could be an attribute of the element "cc", e.g., ```<cc version='1.0'>...</cc>```.
 
 ```XML
       <api>[string [cli|so|jar|include|import|...]]</api>
 ```
 The interface to the extension. All CCs have to have support for a CLI.
 
-This element could be an attribute of the element "exec", e.g., ```<exec api='jar'>...</exec>```.
+This element could be an attribute of the element "cc", e.g., ```<cc api='jar'>...</cc>```.
 
 ```XML
       <path>[string [file]]</path>
@@ -450,7 +450,7 @@ The path to the file which executes or initializes the extension.
 ```
 The arguments, switches, options, or parameters, if any, to be passed to the extension.
 
-This element could be an attribute of the element "exec", e.g., ```<exec arg='-x -y'>...</exec>```.
+This element could be an attribute of the element "cc", e.g., ```<cc arg='-x -y'>...</cc>```.
 
 ```XML
   <report>[string [directory]]</report>
