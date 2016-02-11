@@ -19,7 +19,7 @@ Overview
 
 The PIF consist of two set of APIs: the PIA and PEA.
 
-The PIA defines a method to integrate an external system with a CC. Discussed in Section 1.
+The PIA defines a method to integrate an external system with one or more CCs. Discussed in Section 1.
 
 The PEA defines the method to extend a CC (Conformance Checker) to check for other types of resources not supported by the source CC through means of using another CC or a specific plug-in. Discussed in Section 2.
 
