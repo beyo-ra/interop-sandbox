@@ -17,7 +17,7 @@ Introduction
 Overview
 --------
 
-The PIF consist of two set of APIs: the PIA and PIE.
+The PIF consist of two set of APIs: the PIA and PEA.
 
 The PIA defines a method to integrate an external system with a CC. Discussed in Section 1.
 
