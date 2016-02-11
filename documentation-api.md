@@ -402,7 +402,7 @@ Which method to apply in order to make an initial, quick/fast, guess of the type
 
 Defining an appropriate method for defining multiple values may be necessary.
 
-EXAMPLE
+<EXAMPLE>
 ```XML
       <signature type='fext'>jpg|jpeg</signature>
 ```
@@ -414,6 +414,7 @@ EXAMPLE
         </rdf:Description>
       </signature>
 ```
+</EXAMPLE>
 
 ```XML
       <priority>[unsigned int]</priority>
