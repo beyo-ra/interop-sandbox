@@ -408,8 +408,10 @@ EXAMPLE
 ```
 ```XML
       <signature type='XMP'>
-        <pdfaid>part:1</pdfaid>
-        <pdfaid>conformance:A</pdfaid>
+        <rdf:Description rdf:about="" xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/">
+          <pdfaid>part:1</pdfaid>
+          <pdfaid>conformance:A</pdfaid>
+        </rdf:Description>
       </signature>
 ```
 
