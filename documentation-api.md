@@ -443,7 +443,7 @@ This element could be an attribute of the element "cc", e.g., ```<cc api='jar'>.
 ```XML
       <path>[string [file]]</path>
 ```
-The path to the file which executes or initializes the extension.
+The path to the file which executes or initializes the extension, e.g., a binary/executable or script.
 
 ```XML
       <arg>[string []]</arg>
