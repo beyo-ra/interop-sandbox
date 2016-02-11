@@ -431,7 +431,7 @@ The user's label for the purpose of the extension. Could be complemented with a 
 ```
 The version, release, edition or other form of identification of a variance of the extension.
 
-This element could be an attribute of the element "exec", e.g., ```<exec version='1.0'>...</exec>```.
+This element could be an attribute of the element "path", e.g., ```<path version='1.0'>...</path>```.
 
 ```XML
       <api>[string [cli|so|jar|include|import|...]]</api>
