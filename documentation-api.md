@@ -9,7 +9,7 @@ Abbreviations
 | CLI | Command Line Interface
 | PEA | PREFORMA Extension API
 | PIA | PREFORMA Intergration API
-| PIF | PREFORMA Interoperability 
+| PIF | PREFORMA Interoperability Framework
 
 Introduction
 ============
